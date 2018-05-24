@@ -1,2 +1,2 @@
 # RustSweeper
-An versitile minesweeper design, in rust!
+An versatile minesweeper design, in Rust!
