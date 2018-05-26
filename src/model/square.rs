@@ -26,7 +26,8 @@ pub struct Square{
 
 impl Square{
     // Adds an adjacent Square to a Square
-    pub fn add_adjacent(Square: adjacent){
+    // If there is no room for an adjacent, you will be ignored
+    pub fn add_adjacent(&mut self, Square: adjacent){
         for i in self.adjacent_squares.iter() {
             if self.adjacent_squares[i] == null {
                 self.adjacent_squares[i] = adjacent;
@@ -36,27 +37,42 @@ impl Square{
 
     // Opens a square if it is not already
     // Returns false if the square is Opened, otherwise true
-    pub fn open(){
+    pub fn open(&mut self) -> bool {
         if self.status == Status:Opened {
-            return false;
+            false
+        } else {
+            self.status = Status::Opened;
+            true
         }
-        self.status = Status::Opened;
-        return true;
     }
 
     // Toggles the flag status
     // Square must be in the Covered or Flagged state
     // Returns false if the flag is not Covered or Flagged, otherwise true
-    pub fn toggle_flag(){
+    pub fn toggle_flag(&mut self) -> bool {
         match self.Status {
-            Status::Covered => self.status = Status::Flagged,
-            Status::Flagged => self.status = Status::Covered,
+            Status::Covered => {
+                self.status = Status::Flagged;
+                true
+            },
+            Status::Flagged => {
+                self.status = Status::Covered;
+                true
+            },
             //Catch other Status (Can't flag Opened tiles)
-            _ => return false,
+            _ => false
         }
-        //If we get here, we had success
-        return true;
     }
+
+    // Counts the number of adjacent mines
+    pub fn getValue(&self) -> u32 {
+        let u32: count = 0;
+        for i in self.adjacent_squares.iter(){
+            if self.adjacent_squares[i].Contents == Contents::Mine {i++;}
+        }
+        i
+    }
+
 }
 
 
