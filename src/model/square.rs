@@ -25,9 +25,17 @@ pub struct Square{
 }
 
 impl Square{
+    //A simple constructor
+    pub fn new(c: Contents) -> Square {
+        Square {
+            status: Status::Covered,
+            contents: c,
+        }
+    }
+
     // Adds an adjacent Square to a Square
     // If there is no room for an adjacent, you will be ignored
-    pub fn add_adjacent(&mut self, Square: adjacent){
+    pub fn add_adjacent(&mut self, adjacent: Square){
         for i in self.adjacent_squares.iter() {
             if self.adjacent_squares[i] == null {
                 self.adjacent_squares[i] = adjacent;
