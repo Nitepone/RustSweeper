@@ -4,32 +4,37 @@
 // Distributed under terms of the MIT license.
 //
 
-const MAX_ADJACENT: u8 = 8;
+use std::ptr;
 
+const MAX_ADJACENT: usize = 8;
+
+#[derive(PartialEq)]
 pub enum Status{
     Opened,
     Flagged,
     Covered
 }
 
+#[derive(PartialEq)]
 pub enum Contents{
     Empty,
     Mine
 }
 
 pub struct Square{
-    adjacent_squares: Square[MAX_ADJACENT],
+    adjacent_squares: [Option<Box<Square>>; MAX_ADJACENT],
     status: Status,
     contents: Contents,
-    cached_adjacent_mines: u8
 }
 
 impl Square{
     //A simple constructor
     pub fn new(c: Contents) -> Square {
+        let adjacent_array = [None; MAX_ADJACENT];
         Square {
             status: Status::Covered,
             contents: c,
+            adjacent_squares: adjacent_array
         }
     }
 
@@ -37,7 +42,7 @@ impl Square{
     // If there is no room for an adjacent, you will be ignored
     pub fn add_adjacent(&mut self, adjacent: Square){
         for i in self.adjacent_squares.iter() {
-            if self.adjacent_squares[i] == null {
+            if self.adjacent_squares[i] == ptr::null() {
                 self.adjacent_squares[i] = adjacent;
             }
         }
@@ -46,7 +51,7 @@ impl Square{
     // Opens a square if it is not already
     // Returns false if the square is Opened, otherwise true
     pub fn open(&mut self) -> bool {
-        if self.status == Status:Opened {
+        if self.status == Status::Opened {
             false
         } else {
             self.status = Status::Opened;
@@ -58,7 +63,7 @@ impl Square{
     // Square must be in the Covered or Flagged state
     // Returns false if the flag is not Covered or Flagged, otherwise true
     pub fn toggle_flag(&mut self) -> bool {
-        match self.Status {
+        match self.status {
             Status::Covered => {
                 self.status = Status::Flagged;
                 true
@@ -73,12 +78,14 @@ impl Square{
     }
 
     // Counts the number of adjacent mines
-    pub fn getValue(&self) -> u32 {
-        let u32: count = 0;
-        for i in self.adjacent_squares.iter(){
-            if self.adjacent_squares[i].Contents == Contents::Mine {i++;}
+    pub fn get_value(&self) -> u32 {
+        let count: u32 = 0;
+        for adjacent in self.adjacent_squares.iter(){
+            match adjacent.contents {
+                Contents::Mine => count+=1,
+            }
         }
-        i
+        count
     }
 
 }
@@ -90,6 +97,8 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn it_works() {
+	fn construction_test() {
+        let test_square = Square::new(Contents::Mine);
+        assert_eq(test_square.contents, Contents::Mine);
 	}
 }
