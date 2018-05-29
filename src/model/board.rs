@@ -4,6 +4,8 @@
 // Distributed under terms of the MIT license.
 //
 
+mod square;
+
 pub struct Board{
     width: u32,
     height: u32,
@@ -49,6 +51,7 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn it_works() {
+	fn construction_test() {
+        let test_board: Board = Board::new(10,10,10);
 	}
 }
