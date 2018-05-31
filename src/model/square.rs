@@ -4,8 +4,6 @@
 // Distributed under terms of the MIT license.
 //
 
-use std::ptr;
-
 const MAX_ADJACENT: usize = 8;
 
 #[derive(PartialEq)]
@@ -22,7 +20,7 @@ pub enum Contents{
 }
 
 pub struct Square{
-    adjacent_squares: [Option<Box<Square>>; MAX_ADJACENT],
+    adjacent_squares: Vec<Option<Box<Square>>>,
     status: Status,
     contents: Contents,
 }
@@ -30,20 +28,19 @@ pub struct Square{
 impl Square{
     //A simple constructor
     pub fn new(c: Contents) -> Square {
-        let adjacent_array = [None; MAX_ADJACENT];
         Square {
             status: Status::Covered,
             contents: c,
-            adjacent_squares: adjacent_array
+            adjacent_squares: Vec::new()
         }
     }
 
     // Adds an adjacent Square to a Square
     // If there is no room for an adjacent, you will be ignored
     pub fn add_adjacent(&mut self, adjacent: Square){
-        for i in self.adjacent_squares.iter() {
-            if self.adjacent_squares[i] == ptr::null() {
-                self.adjacent_squares[i] = adjacent;
+        for my_adjacent in self.adjacent_squares.iter() {
+            match my_adjacent {
+                &None => my_adjacent = adjacent
             }
         }
     }
