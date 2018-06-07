@@ -1,0 +1,10 @@
+[package]
+name = "rustsweeper"
+version = "0.1.0"
+authors = ["Nitepone <admin@night.horse>"]
+
+[dependencies]
+
+[[bin]]
+name = "test"
+path = "src/model/square.rs"
